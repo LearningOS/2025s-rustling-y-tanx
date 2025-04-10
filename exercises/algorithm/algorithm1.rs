@@ -1,6 +1,7 @@
 /*
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
+    链表合并
 */
 // I AM NOT DONE
 
@@ -11,7 +12,7 @@ use std::vec::*;
 #[derive(Debug)]
 struct Node<T> {
     val: T,
-    next: Option<NonNull<Node<T>>>,
+    next: Option<NonNull<Node<T>>>, // 
 }
 
 impl<T> Node<T> {
