@@ -8,5 +8,5 @@
 
 fn main() {
     let x = 5;
-    println!("x has the value {}", x);  // Rust中变量的打印有两种格式，Display和Debug
+    println!("x has the value {}", x);  // Rust中变量的打印有两种格式，Display和Debug（实现了格式化）
 }
