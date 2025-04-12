@@ -14,10 +14,10 @@
 // Execute `rustlings hint hashmaps2` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
 use std::collections::HashMap;
 
+// Hash允许实例被哈希化，即可以用于HashMap或HashSet这样的哈希同期
+// 这3个trait可以让Fruit作为key存储在哈希表中，Hash用于计算哈希值
 #[derive(Hash, PartialEq, Eq)]
 enum Fruit {
     Apple,
@@ -40,6 +40,12 @@ fn fruit_basket(basket: &mut HashMap<Fruit, u32>) {
         // TODO: Insert new fruits if they are not already present in the
         // basket. Note that you are not allowed to put any type of fruit that's
         // already present!
+        // 种类必须≥5，count必须＞11，每种水果的value不能为0
+        // map插入：insert和or_insert，insert会覆盖，or_insert则不会覆盖
+        // 向entry()中传入一个key，返回一个Entry<K, V>,Entry是一个枚举，包含了Occupied和Vacant
+        // 如果key不存在，则返回Entry::Vacant(...)
+        // or_insert接受一个default作为Entry::Vacant的默认值，对于Entry::Occupied则不会修改
+        basket.entry(fruit).or_insert(3);
     }
 }
 

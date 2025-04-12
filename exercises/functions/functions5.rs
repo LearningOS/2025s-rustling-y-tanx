@@ -10,5 +10,5 @@ fn main() {
 }
 
 fn square(num: i32) -> i32 {
-    num * num
+    num * num   // Rust中允许直接使用表达式作为函数的返回值，但是表达式的后面不能再有语句
 }

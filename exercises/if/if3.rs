@@ -4,6 +4,7 @@
 
 
 pub fn animal_habitat(animal: &str) -> &'static str {
+    // 可以使用if对变量进行赋值，但是要求每个if分支都是一个表达式，且不能出现不同类型的表达式
     let identifier = if animal == "crab" {
         1
     } else if animal == "gopher" {

@@ -2,6 +2,7 @@
 //
 // Execute `rustlings hint move_semantics1` or use the `hint` watch subcommand
 // for a hint.
+// 这是所有权转移，Rust中一个需要防范和注意的地方，尽量避免写可能导致所有权转移的代码
 
 
 fn main() {
@@ -24,4 +25,4 @@ fn fill_vec(vec: Vec<i32>) -> Vec<i32> {
     vec.push(66);
 
     vec
-}
+}   // 所有权发生了三次转移：从vec0 -> 参数vec，参数vec -> 变量vec，变量vec -> vec1

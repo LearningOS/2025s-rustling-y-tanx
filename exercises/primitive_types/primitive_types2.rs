@@ -13,8 +13,10 @@ fn main() {
     // Note the _single_ quotes, these are different from the double quotes
     // you've been seeing around.
     let my_first_initial = 'C';
+    // 字母字符? is_alphabetic()
     if my_first_initial.is_alphabetic() {
         println!("Alphabetical!");
+    // 数字字符？is_numeric()
     } else if my_first_initial.is_numeric() {
         println!("Numerical!");
     } else {

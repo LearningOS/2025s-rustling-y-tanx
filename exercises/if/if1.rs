@@ -9,6 +9,7 @@ pub fn bigger(a: i32, b: i32) -> i32 {
     // - another function call
     // - additional variables
 
+    // Rust中if表达式不用加括号，Python也是如何（实际上加了也没啥事:-）
     if a > b {
         a
     } else {

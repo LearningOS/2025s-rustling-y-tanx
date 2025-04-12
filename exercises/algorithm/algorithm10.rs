@@ -1,20 +1,23 @@
 /*
 	graph
 	This problem requires you to implement a basic graph functio
+    用Rust实现图的各个接口
 */
-// I AM NOT DONE
+// 最后一个啦!
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 #[derive(Debug, Clone)]
-pub struct NodeNotInGraph;
+pub struct NodeNotInGraph;  // 节点不在图中
 impl fmt::Display for NodeNotInGraph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "accessing a node that is not in the graph")
     }
 }
+// 无向图
 pub struct UndirectedGraph {
-    adjacency_table: HashMap<String, Vec<(String, i32)>>,
+    adjacency_table: HashMap<String, Vec<(String, i32)>>,   // 使用邻接表
+    // vi: [vi1, vi2, ...]，保存了vi的所有邻居
 }
 impl Graph for UndirectedGraph {
     fn new() -> UndirectedGraph {
@@ -28,20 +31,41 @@ impl Graph for UndirectedGraph {
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>> {
         &self.adjacency_table
     }
+
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
+        let v1 = edge.0.to_string();
+        let v2 = edge.1.to_string();
+        let val = edge.2;
+
+        let v1_neighbors = self.adjacency_table.entry(v1.clone()).or_insert_with(Vec::new);
+        v1_neighbors.push((v2.clone(), val));
+
+        let v2_neighbors = self.adjacency_table.entry(v2).or_insert_with(Vec::new);
+        v2_neighbors.push((v1, val));
     }
 }
+// 图trait
 pub trait Graph {
     fn new() -> Self;
     fn adjacency_table_mutable(&mut self) -> &mut HashMap<String, Vec<(String, i32)>>;
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>>;
     fn add_node(&mut self, node: &str) -> bool {
         //TODO
-		true
+        // 增加一个节点，需要为它在哈希表中初始化键值对
+        self.adjacency_table_mutable()
+        .insert(node.to_string(), Vec::new())
+        .is_none()
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        // 这是为有向图实现的？
+        let v1 = edge.0.to_string();
+        let v2 = edge.1.to_string();
+        let val = edge.2;
+
+        // 将这个边插入到v1原有的邻居列表中
+        let v1_neighbors = self.adjacency_table_mutable().entry(v1).or_insert_with(Vec::new);
+        v1_neighbors.push((v2, val));
     }
     fn contains(&self, node: &str) -> bool {
         self.adjacency_table().get(node).is_some()

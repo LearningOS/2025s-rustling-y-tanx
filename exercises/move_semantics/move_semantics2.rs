@@ -11,7 +11,7 @@
 fn main() {
     let vec0 = Vec::new();
 
-    let mut vec1 = fill_vec(vec0.clone());
+    let mut vec1 = fill_vec(vec0.clone());  // vec0的所有权没有发生转移
 
     println!("{} has length {}, with contents: `{:?}`", "vec0", vec0.len(), vec0);
 

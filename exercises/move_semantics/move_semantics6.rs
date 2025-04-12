@@ -7,11 +7,11 @@
 
 
 fn main() {
-    let data = "Rust is great!".to_string();
+    let data = "Rust is great!".to_string();    // 字符串字面量是&str类型，就是String的引用
 
     get_char(data.clone());
 
-    string_uppercase(data);
+    string_uppercase(data); // 发生了所有权的转移
 }
 
 // Should not take ownership

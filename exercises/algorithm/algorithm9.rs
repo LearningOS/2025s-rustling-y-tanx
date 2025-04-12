@@ -2,7 +2,6 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -12,8 +11,8 @@ where
     T: Default,
 {
     count: usize,
-    items: Vec<T>,
-    comparator: fn(&T, &T) -> bool,
+    items: Vec<T>,  // 使用序列实现完全二叉堆
+    comparator: fn(&T, &T) -> bool,     // 按照闭包指示的顺序来构造堆
 }
 
 impl<T> Heap<T>
@@ -23,7 +22,7 @@ where
     pub fn new(comparator: fn(&T, &T) -> bool) -> Self {
         Self {
             count: 0,
-            items: vec![T::default()],
+            items: Vec::new(),
             comparator,
         }
     }
@@ -38,10 +37,65 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        // 首先将该元素插入到最后
+        self.items.push(value);
+        self.count += 1;
+        let mut idx = self.len() - 1;
+        
+        // 然后开始上浮，根据comparator依次交换父节点和子节点
+        while idx > 0 {
+            let mut parent = self.parent_idx(idx);
+            if !(self.comparator)(&self.items[parent], &self.items[idx]) {
+                // 不满足comparator，则开始交换
+                self.items.swap(parent, idx);  
+                idx = parent;
+            }else {
+                break;  // 如果不需要交换，说明这已经是它应该在的位置了
+            }
+        }
+    }
+
+    pub fn pop(&mut self) -> Option<T> {
+        // 按照comparator指示的顺序弹出元素
+        if self.is_empty() {
+            return None;
+        }
+        // 首先将最后一个元素和堆顶元素进行交换
+        self.items.swap(0, self.count - 1); 
+        let result = self.items.pop();
+        self.count -= 1;
+        let len = self.len();
+
+        // 然后将堆顶元素下推，在下推过程中就完成了更新堆的过程
+        let mut idx = 0;
+        loop {
+            let left_idx = self.left_child_idx(idx);
+            let right_idx = self.right_child_idx(idx);
+            let mut best = idx;
+
+            // 比较best和left_idx、right_idx之间的大小，判断是否可以交换
+            if left_idx < len && !(self.comparator)(&self.items[best], &self.items[left_idx]) {
+                best = left_idx;
+            }
+
+            if right_idx < len && !(self.comparator)(&self.items[best], &self.items[right_idx]) {
+                best = right_idx;
+            }
+
+            if best != idx {
+                // 更新
+                self.items.swap(best, idx);
+                idx = best;
+            }else {
+                break;  // 更新到了正确的位置
+            }
+        }
+
+        result
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
-        idx / 2
+        (idx - 1) / 2
     }
 
     fn children_present(&self, idx: usize) -> bool {
@@ -54,11 +108,6 @@ where
 
     fn right_child_idx(&self, idx: usize) -> usize {
         self.left_child_idx(idx) + 1
-    }
-
-    fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
     }
 }
 
@@ -85,10 +134,11 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+        self.pop()
     }
 }
 
+/// 最小堆
 pub struct MinHeap;
 
 impl MinHeap {
@@ -101,6 +151,7 @@ impl MinHeap {
     }
 }
 
+/// 最大堆
 pub struct MaxHeap;
 
 impl MaxHeap {

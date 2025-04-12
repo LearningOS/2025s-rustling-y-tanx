@@ -1,9 +1,9 @@
 /*
 	stack
 	This question requires you to use a stack to achieve a bracket match
+	实现栈结构
 */
 
-// I AM NOT DONE
 #[derive(Debug)]
 struct Stack<T> {
 	size: usize,
@@ -32,8 +32,13 @@ impl<T> Stack<T> {
 	}
 	fn pop(&mut self) -> Option<T> {
 		// TODO
-		None
+		if 0 == self.size {
+			return None;
+		}
+		self.size -= 1;
+		self.data.pop()
 	}
+	// 获得栈顶元素
 	fn peek(&self) -> Option<&T> {
 		if 0 == self.size {
 			return None;
@@ -46,8 +51,9 @@ impl<T> Stack<T> {
 		}
 		self.data.get_mut(self.size - 1)
 	}
+	// 实现迭代器，需要一个结构来实现Iterator
 	fn into_iter(self) -> IntoIter<T> {
-		IntoIter(self)
+		IntoIter(self)	// 返回一个迭代器，这消耗整个Stack
 	}
 	fn iter(&self) -> Iter<T> {
 		let mut iterator = Iter { 
@@ -68,7 +74,7 @@ impl<T> Stack<T> {
 		iterator
 	}
 }
-struct IntoIter<T>(Stack<T>);
+struct IntoIter<T>(Stack<T>);	// 迭代器类型包装了原类型
 impl<T: Clone> Iterator for IntoIter<T> {
 	type Item = T;
 	fn next(&mut self) -> Option<Self::Item> {
@@ -102,7 +108,24 @@ impl<'a, T> Iterator for IterMut<'a, T> {
 fn bracket_match(bracket: &str) -> bool
 {
 	//TODO
-	true
+	let mut stack = Stack::new();
+	// 遍历字符串，遇到左括号则加入到栈中，遇到右括号则尝试匹配
+	for c in bracket.chars() {
+		match c {
+			'(' | '[' | '{' => stack.push(c),
+			')' => {
+				if stack.pop() != Some('(') { return false; }
+			}
+			']' => {
+				if stack.pop() != Some('[') { return false; }
+			}
+			'}' => {
+				if stack.pop() != Some('{') { return false; }
+			}
+			_ => {}
+		}
+	}
+	stack.is_empty()
 }
 
 #[cfg(test)]

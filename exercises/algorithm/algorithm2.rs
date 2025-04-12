@@ -1,18 +1,17 @@
 /*
 	double linked list reverse
 	This problem requires you to reverse a doubly linked list
+    翻转双向链表
 */
-// I AM NOT DONE
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
-use std::vec::*;
 
 #[derive(Debug)]
 struct Node<T> {
     val: T,
-    next: Option<NonNull<Node<T>>>,
-    prev: Option<NonNull<Node<T>>>,
+    next: Option<NonNull<Node<T>>>, // 指向后驱节点
+    prev: Option<NonNull<Node<T>>>, // 指向前驱节点
 }
 
 impl<T> Node<T> {
@@ -26,7 +25,7 @@ impl<T> Node<T> {
 }
 #[derive(Debug)]
 struct LinkedList<T> {
-    length: u32,
+    length: i32,
     start: Option<NonNull<Node<T>>>,
     end: Option<NonNull<Node<T>>>,
 }
@@ -46,14 +45,15 @@ impl<T> LinkedList<T> {
         }
     }
 
+    // 添加一个节点到链表尾部
     pub fn add(&mut self, obj: T) {
         let mut node = Box::new(Node::new(obj));
         node.next = None;
-        node.prev = self.end;
+        node.prev = self.end;   // node的前驱节点是end
         let node_ptr = Some(unsafe { NonNull::new_unchecked(Box::into_raw(node)) });
         match self.end {
             None => self.start = node_ptr,
-            Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = node_ptr },
+            Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = node_ptr },    // 
         }
         self.end = node_ptr;
         self.length += 1;
@@ -74,6 +74,34 @@ impl<T> LinkedList<T> {
     }
 	pub fn reverse(&mut self){
 		// TODO
+        // 链表翻转：两个指针，一个指向前节点，一个指向当前节点
+        if self.length == 0 {
+            return;
+        }
+
+        // 初始化指针
+        let mut current: NonNull<Node<T>> = self.start.unwrap();
+        let mut prev: Option<NonNull<Node<T>>> = None; 
+
+        for i in 0..self.length {
+            // 保存下一个节点，避免next修改后信息丢失
+            let next = unsafe { (*current.as_ptr()).next }; 
+
+            // 修改current->next = prev；prev->prev = current
+            unsafe { (*current.as_ptr()).next = prev };
+            if let Some(prev_node) = prev {
+                unsafe { (*prev_node.as_ptr()).prev =  Some(current) };
+            }
+
+            // 更新prev和current
+            prev = Some(current);
+            if let Some(next_node) = next {
+                current = next_node;
+            }
+        }
+
+        // 更新链表头部和尾部节点信息
+        std::mem::swap(&mut self.start, &mut self.end);
 	}
 }
 

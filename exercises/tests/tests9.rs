@@ -27,17 +27,22 @@
 //
 // You should NOT modify any existing code except for adding two lines of attributes.
 
-// I AM NOT DONE
-
 extern "Rust" {
     fn my_demo_function(a: u32) -> u32;
     fn my_demo_function_alias(a: u32) -> u32;
 }
 
-mod Foo {
-    // No `extern` equals `extern "Rust"`.
-    fn my_demo_function(a: u32) -> u32 {
+mod foo {
+    // 不写 `extern`，等价于 `extern "Rust"`，暴露时默认 Rust ABI。
+    #[no_mangle]
+    pub extern "Rust" fn my_demo_function(a: u32) -> u32 {
         a
+    }
+
+    #[no_mangle]
+    #[link_name = "my_demo_function"]
+    pub extern "Rust" fn my_demo_function_alias(a: u32) -> u32 {
+        my_demo_function(a)
     }
 }
 

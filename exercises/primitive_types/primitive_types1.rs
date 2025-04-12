@@ -15,6 +15,8 @@ fn main() {
         println!("Good morning!");
     }
 
+    // Rust中bool类型的变量只能有两个值：true和false，与C++不同，数值型变量不能作为布尔型变量来使用
+    // 即Rust不能自动实现非bool类型到bool类型的转换，if之后必须跟着明确的bool类型的变量  
     let is_evening = false;// Finish the rest of this line like the example! Or make it be false!
     if is_evening {
         println!("Good evening!");

@@ -8,6 +8,7 @@ fn main() {
     call_me();
 }
 
+// Rust函数并不区分前后，认为都是在同一个作用域内
 fn call_me() {
 
 }
